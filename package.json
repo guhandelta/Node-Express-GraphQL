@@ -1,36 +1,18 @@
 {
-  "name": "react-graphql-chatapp",
+  "name": "react-graphql",
   "version": "1.0.0",
-  "description": "A chat app using ReactJS, GraphQL Subscriptions, Apollo Client, Web Sockets and Webpack 5's module federation",
+  "description": "",
   "main": "index.js",
-  "dependencies": {
-    "graphql-yoga": "^1.18.3"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/guhandelta/React-GraphQL-Apollo-ChatApp.git"
-  },
-  "keywords": [
-    "React",
-    "ReactJS",
-    "Apollo",
-    "GraphQL",
-    "GraphQL",
-    "Subscription",
-    "Websockets",
-    "web",
-    "sockets",
-    "module",
-    "federation"
-  ],
-  "author": "Guhaprasaanth Nandagopal",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/guhandelta/React-GraphQL-Apollo-ChatApp/issues"
-  },
-  "homepage": "https://github.com/guhandelta/React-GraphQL-Apollo-ChatApp#readme"
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.4.0",
+    "lodash": "^4.17.20"
+  }
 }
