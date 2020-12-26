@@ -2,7 +2,7 @@
 // Has the data about what properties does each object have and how the objects are realted to each other
 // The schema file also communicates all the different types of data in the app to GraphQL
 const graphql = require('graphql');
-const _ = require('lodash'); // A helpful library to walk through and perform any operations on data
+const axios = require('axios'); // A helpful library to walk through and perform any operations on data
 
 // GraphQLObjectType is used to instruct GraphQL that an entity/obj exists with it's set of props 
 const { 
@@ -11,12 +11,6 @@ const {
     GraphQLInt,
     GraphQLSchema // Takes in a RootQuery and return a GraphQL Scehma Instance
 } = graphql;
-
-// Hard coded user data, just for the 1st iteration
-const users = [
-    { id: '07', firstName: 'Ajith', age: 17 },
-    { id: '30', firstName: 'Al Pacino', age: 21 },
-];
 
 // GraphQLObjectType instructs GraphQL that how an user obj looks like 
 const UserType = new GraphQLObjectType({
@@ -45,16 +39,20 @@ const RootQuery = new GraphQLObjectType({
                     }
             },
             // resolve() is very **, as it is what that dives into the db to fetch the data
+            // resolve makes it possible to fetch any data from anywhere in any way 
             resolve(parentValue, args){ //args represents the arguments that were passed into the query, which-
                //- in this case is id | args will have the args passed into the original query => id in this case
 
                 // Go through all the users and find the user with the id === id provided as args
-                return _.find(users, { id: args.id }); // args.id, be provided to the query when the query is made
-                // This returns the element currently being searched for and return an object, which GraphQL intercepts-
-                //- to extract the data and display it on graphiql or return it as the result of the query 
+                // args.id, be provided to the query when the query is made
+                return axios.get(`http://localhost:3000/users/${args.id}`) 
+                //  .then(res => console.log(res)) => will print {data: {"id": "23",...}}, as a nested object
+                // GraphQL doesn't know that the data is nested in res.data prop | Just to make axios and-
+                //- GraphQL work together, just extract the data from res and send it in response
+                 .then(res => res.data) 
 
-                // _.find(...) returns a raw JS object | It was not explicitly mentioned as new UserType(), as GraphQL-
-                //- does that in the backend 
+                // resolve() can also work async by returning a promise | The GraphQL server will sense this,-
+                //- wait for the promise to resolve and send the resolved data to the client/app
             }
         }
     }
