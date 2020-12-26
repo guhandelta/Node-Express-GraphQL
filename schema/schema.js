@@ -50,11 +50,17 @@ const RootQuery = new GraphQLObjectType({
 
                 // Go through all the users and find the user with the id === id provided as args
                 return _.find(users, { id: args.id }); // args.id, be provided to the query when the query is made
+                // This returns the element currently being searched for and return an object, which GraphQL intercepts-
+                //- to extract the data and display it on graphiql or return it as the result of the query 
+
+                // _.find(...) returns a raw JS object | It was not explicitly mentioned as new UserType(), as GraphQL-
+                //- does that in the backend 
             }
         }
     }
 });
 
+// Returns a GraphQL Schema, to be used in the app
 module.exports = new GraphQLSchema({
     query: RootQuery
 });
