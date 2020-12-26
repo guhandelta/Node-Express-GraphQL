@@ -7,6 +7,7 @@ const PORT = 4000;
 app.use('/graphql', graphqlHTTP({
     graphiql: true // graphiql is a development tool that allows to query against the server, only to be used-
    //- in dev env
+   
 }));
 
 app.listen(PORT, () => {
