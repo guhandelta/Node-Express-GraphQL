@@ -2,12 +2,21 @@
 // Has the data about what properties does each object have and how the objects are realted to each other
 // The schema file also communicates all the different types of data in the app to GraphQL
 const graphql = require('graphql');
+const _ = require('lodash'); // A helpful library to walk through and perform any operations on data
+
 // GraphQLObjectType is used to instruct GraphQL that an entity/obj exists with it's set of props 
 const { 
     GraphQLObjectType,
     GraphQLString,
-    GraphQLInt
+    GraphQLInt,
+    GraphQLSchema // Takes in a RootQuery and return a GraphQL Scehma Instance
 } = graphql;
+
+// Hard coded user data, just for the 1st iteration
+const users = [
+    { id: '07', firstName: 'Ajith', age: 17 },
+    { id: '30', firstName: 'Al Pacino', age: 21 },
+];
 
 // GraphQLObjectType instructs GraphQL that how an user obj looks like 
 const UserType = new GraphQLObjectType({
@@ -19,7 +28,7 @@ const UserType = new GraphQLObjectType({
     }
 });
 
-// RootQuery -> represents all the entrypoints of the GraphQL API | It's quite like teh entry point for App Data
+// RootQuery -> represents all the entrypoints of the GraphQL API | It's quite like the entry point for App Data
 // RootQuery allows GraphQL to jump and land on a specidif node, in the graph of the entire data
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
@@ -33,13 +42,19 @@ const RootQuery = new GraphQLObjectType({
             args: {
                     id:{
                         type: GraphQLString
-                }
+                    }
             },
             // resolve() is very **, as it is what that dives into the db to fetch the data
             resolve(parentValue, args){ //args represents the arguments that were passed into the query, which-
                //- in this case is id | args will have the args passed into the original query => id in this case
-                
+
+                // Go through all the users and find the user with the id === id provided as args
+                return _.find(users, { id: args.id }); // args.id, be provided to the query when the query is made
             }
         }
     }
+});
+
+module.exports = new GraphQLSchema({
+    query: RootQuery
 });
