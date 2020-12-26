@@ -23,13 +23,16 @@ const CompanyType = new GraphQLObjectType({
 
 // GraphQLObjectType instructs GraphQL that how an user obj looks like 
 const UserType = new GraphQLObjectType({
-    name: 'User', // Obj name, usually starts with an upperCase
+    name: 'User', // Obj name, usually starts with an upperCasef
     fields: { // Most important prop here, which tells GraphQL about all the diff props that a user/userObj has
         id: { type: GraphQLString },
         firstName: { type: GraphQLString },
         age: { type: GraphQLInt },
         company: {
             type: CompanyType,
+            // resolve helps to resolve the data differences, what is held as companyId in the user model, is-
+            //- held as company is the UserType, resolve helps to resolve this differnce adn populate the data-
+            //- appropriately 
             resolve(parentValue, args){
                return axios.get(`http://localhost:3000/companies/${parentValue.companyId}`) 
                 .then(res => res.data)
@@ -71,9 +74,31 @@ const RootQuery = new GraphQLObjectType({
                 // resolve() can also work async by returning a promise | The GraphQL server will sense this,-
                 //- wait for the promise to resolve and send the resolved data to the client/app
             }
+        },
+        // Creating an endpoint in the RootQuery to access the company, without going through the users
+        company:{
+            type: CompanyType,
+            args: {
+                    id:{
+                        type: GraphQLString
+                    }
+            },
+            resolve(parentValue, args){ 
+                return axios.get(`http://localhost:3000/users/${companies.id}`) 
+                            .then(res => res.data) 
+            }
         }
     }
 });
+
+// -----------> resolve() ******** 
+// When a req arrives to the RootQuery with a user id, the RootQuery's resolve() will take teh request to the-
+//- user part of the entire graph. To know about the company, the User's resolve() gets called, with the 1st-
+//- param(parentValue) as the name of the node on the graph from where the req is made from. THen this resolve()-
+//- returns a promise that eventually gives the company data. This entire data structure is sent back to client.
+
+// The Schema can also be stated as a bunch of functions that return references to other objects in the graph,-
+//- like each edgef as a resolve() in the graph 
 
 // Returns a GraphQL Schema, to be used in the app
 module.exports = new GraphQLSchema({
