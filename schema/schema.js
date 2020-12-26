@@ -12,13 +12,30 @@ const {
     GraphQLSchema // Takes in a RootQuery and return a GraphQL Scehma Instance
 } = graphql;
 
+const CompanyType = new GraphQLObjectType({
+    name: 'Company',
+    fields:{
+        id: { type: GraphQLString },
+        name: { type: GraphQLString },
+        product: { type: GraphQLString }
+    }
+});
+
 // GraphQLObjectType instructs GraphQL that how an user obj looks like 
 const UserType = new GraphQLObjectType({
     name: 'User', // Obj name, usually starts with an upperCase
     fields: { // Most important prop here, which tells GraphQL about all the diff props that a user/userObj has
         id: { type: GraphQLString },
         firstName: { type: GraphQLString },
-        age: { type: GraphQLInt }
+        age: { type: GraphQLInt },
+        company: {
+            type: CompanyType,
+            resolve(parentValue, args){
+               return axios.get(`http://localhost:3000/companies/${parentValue.companyId}`) 
+                .then(res => res.data)
+            }
+        }
+        
     }
 });
 
