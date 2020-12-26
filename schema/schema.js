@@ -111,6 +111,23 @@ const RootQuery = new GraphQLObjectType({
 // The Schema can also be stated as a bunch of functions that return references to other objects in the graph,-
 //- like each edgef as a resolve() in the graph 
 
+const mutation = new GraphQLObjectType({
+    name: 'Mutation',
+    fields:{
+        addUser:{
+            type: UserType, // It is not always necessary that resolve() always returns the same data type that is worked on/processed
+            args: {
+                firstName: { type: GraphQLString },
+                agr: { type: GraphQLInt },
+                companyId: { type: GraphQLString },
+            },
+            resolve(){
+                
+            }
+        }
+    }
+});
+
 // Returns a GraphQL Schema, to be used in the app
 module.exports = new GraphQLSchema({
     query: RootQuery
