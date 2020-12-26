@@ -27,7 +27,7 @@
         },
         {
             "id": "2",
-            "firstName": "Google",
+            "name": "Google",
             "product": "Android"
         }
     ]

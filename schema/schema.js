@@ -9,22 +9,35 @@ const {
     GraphQLObjectType,
     GraphQLString,
     GraphQLInt,
+    GraphQLList,
     GraphQLSchema // Takes in a RootQuery and return a GraphQL Scehma Instance
 } = graphql;
 
 const CompanyType = new GraphQLObjectType({
     name: 'Company',
-    fields:{
+    fields:() => ({
         id: { type: GraphQLString },
         name: { type: GraphQLString },
-        product: { type: GraphQLString }
-    }
+        product: { type: GraphQLString },
+        users: {
+            // Company -to-> User => will give the list of users associated with that company,GraphQLList will-
+            //- Instruct the GraphQL server to expect a list of users 
+            type: new GraphQLList(UserType),
+            // There are no further searches expected, after Company -to-> User, so no args are required here
+            resolve(parentValue, args) {
+                // parentValue => has teh current that was fetched and currently working with
+                return axios.get(`http://localhost:3000/companies/${parentValue.id}/users`)
+                .then(res => res.data);
+            }
+            
+        }
+    })
 });
 
 // GraphQLObjectType instructs GraphQL that how an user obj looks like 
 const UserType = new GraphQLObjectType({
     name: 'User', // Obj name, usually starts with an upperCasef
-    fields: { // Most important prop here, which tells GraphQL about all the diff props that a user/userObj has
+    fields: () => ({ // Most important prop here, which tells GraphQL about all the diff props that a user/userObj has
         id: { type: GraphQLString },
         firstName: { type: GraphQLString },
         age: { type: GraphQLInt },
@@ -39,7 +52,7 @@ const UserType = new GraphQLObjectType({
             }
         }
         
-    }
+    })
 });
 
 // RootQuery -> represents all the entrypoints of the GraphQL API | It's quite like the entry point for App Data
@@ -79,12 +92,10 @@ const RootQuery = new GraphQLObjectType({
         company:{
             type: CompanyType,
             args: {
-                    id:{
-                        type: GraphQLString
-                    }
+                    id:{ type: GraphQLString },
             },
             resolve(parentValue, args){ 
-                return axios.get(`http://localhost:3000/users/${companies.id}`) 
+                return axios.get(`http://localhost:3000/companies/${args.id}`) 
                             .then(res => res.data) 
             }
         }
