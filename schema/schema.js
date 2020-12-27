@@ -132,9 +132,25 @@ const mutation = new GraphQLObjectType({
             args: {
                 id: { type: new GraphQLNonNull(GraphQLString) }
             },
-            resolve(parentValue, { id}){ // args => { firstName, age}
+            resolve(parentValue, { id }){ // args => { firstName, age}
                 return axios.delete(`http://localhost:3000/users/${id}`)
                         .then(res => res.data);
+            }
+        },
+        editUser:{
+            type: UserType, // Since the return type is a UserType, the props of UserType: id, firstName, age-
+            //- and company will be autofilled in the graphiql console/editor 
+            args: {
+                id: { type: new GraphQLNonNull(GraphQLString) },
+                firstName: { type: GraphQLString },
+                age: { type: GraphQLInt },
+                companyId: { type: GraphQLString }
+            },
+            resolve(parentValue, args){ // Send the entire args to the PATCH request
+                return axios.patch(`http://localhost:3000/users/${args.id}`, args)
+                        .then(res => res.data);
+                // Passing in the entire set of args will make sure the server updates only the provided entities-
+                //- The id won't be messed with, if it is already been set up 
             }
         }
     }
