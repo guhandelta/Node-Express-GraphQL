@@ -10,6 +10,7 @@ const {
     GraphQLString,
     GraphQLInt,
     GraphQLList,
+    GraphQLNonNull,
     GraphQLSchema // Takes in a RootQuery and return a GraphQL Scehma Instance
 } = graphql;
 
@@ -117,12 +118,13 @@ const mutation = new GraphQLObjectType({
         addUser:{
             type: UserType, // It is not always necessary that resolve() always returns the same data type that is worked on/processed
             args: {
-                firstName: { type: GraphQLString },
-                agr: { type: GraphQLInt },
+                firstName: { type: new GraphQLNonNull(GraphQLString) },
+                age: { type: new GraphQLNonNull(GraphQLInt) },
                 companyId: { type: GraphQLString },
             },
-            resolve(){
-                
+            resolve(parentValue, { firstName, age}){ // args => { firstName, age}
+                return axios.post('http://localhost:3000/users', { firstName, age })
+                        .then(res => res.data);
             }
         }
     }
@@ -130,5 +132,6 @@ const mutation = new GraphQLObjectType({
 
 // Returns a GraphQL Schema, to be used in the app
 module.exports = new GraphQLSchema({
-    query: RootQuery
+    query: RootQuery,
+    mutation // mutation: mutation => Associating GraphQL Object with the GraphQL Schema 
 });

@@ -1,34 +1,39 @@
 {
-    "users":[
-        {
-            "id": "17",
-            "firstName": "Bill",
-            "age": "21",
-            "companyId": "1"
-        },
-        {
-            "id": "26",
-            "firstName": "Larry",
-            "age": "35",
-            "companyId": "2"
-        },
-        {
-            "id": "35",
-            "firstName": "Ben",
-            "age": "49",
-            "companyId": "1"
-        }
-    ],    
-    "companies":[
-        {
-            "id": "1",
-            "name": "Apple",
-            "product": "iPhone"
-        },
-        {
-            "id": "2",
-            "name": "Google",
-            "product": "Android"
-        }
-    ]
+  "users": [
+    {
+      "id": "17",
+      "firstName": "Bill",
+      "age": "21",
+      "companyId": "1"
+    },
+    {
+      "id": "26",
+      "firstName": "Larry",
+      "age": "35",
+      "companyId": "2"
+    },
+    {
+      "id": "35",
+      "firstName": "Ben",
+      "age": "49",
+      "companyId": "1"
+    },
+    {
+      "firstName": "Arun",
+      "age": 32,
+      "id": "6LFGEzu"
+    }
+  ],
+  "companies": [
+    {
+      "id": "1",
+      "name": "Apple",
+      "product": "iPhone"
+    },
+    {
+      "id": "2",
+      "name": "Google",
+      "product": "Android"
+    }
+  ]
 }
